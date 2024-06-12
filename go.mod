@@ -4,9 +4,9 @@ go 1.22.2
 
 require (
 	github.com/chewxy/math32 v1.10.1
+	github.com/google/renameio v1.0.1
 	github.com/mmcloughlin/avo v0.6.0
 	github.com/stretchr/testify v1.9.0
-	github.com/viterin/partial v1.1.0
 	golang.org/x/exp v0.0.0-20240604190554-fc45aab8b7f8
 	golang.org/x/sys v0.21.0
 )
