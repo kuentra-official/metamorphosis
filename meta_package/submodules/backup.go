@@ -1,4 +1,4 @@
-package submodule
+package submodules
 
 import (
 	"errors"
