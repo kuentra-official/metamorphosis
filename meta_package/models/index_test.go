@@ -11,7 +11,7 @@ func TestIndexSchema_Validate_Empty(t *testing.T) {
 	// These types require parameters to be provided
 	iTypes := []string{models.IndexTypeString, models.IndexTypeStringArray,
 		models.IndexTypeText, models.IndexTypeVectorFlat,
-		models.IndexTypeVectorVamana}
+		models.IndexTypeVectorMetaNet}
 	for _, iType := range iTypes {
 		schema := models.IndexSchema{
 			"prop": models.IndexSchemaValue{
@@ -27,7 +27,7 @@ func TestIndexSchema_Validate_Empty(t *testing.T) {
 
 func TestIndexSchema_Validate_Haversine(t *testing.T) {
 	// The haversine distance requires a vector size of 2
-	iTypes := []string{models.IndexTypeVectorFlat, models.IndexTypeVectorVamana}
+	iTypes := []string{models.IndexTypeVectorFlat, models.IndexTypeVectorMetaNet}
 	for _, iType := range iTypes {
 		schema := models.IndexSchema{
 			"prop": models.IndexSchemaValue{
@@ -36,7 +36,7 @@ func TestIndexSchema_Validate_Haversine(t *testing.T) {
 					DistanceMetric: models.DistanceHaversine,
 					VectorSize:     1,
 				},
-				VectorVamana: &models.IndexVectorVamanaParameters{
+				VectorMetaNet: &models.IndexVectorMetaNetParameters{
 					DistanceMetric: models.DistanceHaversine,
 					VectorSize:     1,
 				},
@@ -59,9 +59,9 @@ func TestIndexSchema_CheckCompatibleMap(t *testing.T) {
 				VectorSize:     2,
 			},
 		},
-		"propVectorVamana": models.IndexSchemaValue{
-			Type: models.IndexTypeVectorVamana,
-			VectorVamana: &models.IndexVectorVamanaParameters{
+		"propVectorMetaNet": models.IndexSchemaValue{
+			Type: models.IndexTypeVectorMetaNet,
+			VectorMetaNet: &models.IndexVectorMetaNetParameters{
 				DistanceMetric: models.DistanceEuclidean,
 				VectorSize:     2,
 			},
@@ -96,13 +96,13 @@ func TestIndexSchema_CheckCompatibleMap(t *testing.T) {
 	// ---------------------------
 	// Here is a matching map
 	m := models.PointAsMap{
-		"propVectorFlat":   []any{1.0, 2.0},
-		"propVectorVamana": []any{1.0, 2.0},
-		"propText":         "hello world",
-		"propString":       "hello",
-		"propInteger":      1,
-		"propFloat":        1.1,
-		"propStringArray":  []any{"hello", "world"},
+		"propVectorFlat":    []any{1.0, 2.0},
+		"propVectorMetaNet": []any{1.0, 2.0},
+		"propText":          "hello world",
+		"propString":        "hello",
+		"propInteger":       1,
+		"propFloat":         1.1,
+		"propStringArray":   []any{"hello", "world"},
 	}
 	err := schema.CheckCompatibleMap(m)
 	require.NoError(t, err)

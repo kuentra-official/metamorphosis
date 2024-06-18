@@ -25,7 +25,7 @@ type SearchRequest struct {
 type Query struct {
 	Property     string                     `json:"property" binding:"required"`
 	VectorFlat   *SearchVectorFlatOptions   `json:"vectorFlat"`
-	VectorVamana *SearchVectorVamanaOptions `json:"vectorVamana"`
+	VectorMetaNet *SearchVectorMetaNetOptions `json:"vectorMetaNet"`
 	Text         *SearchTextOptions         `json:"text"`
 	String       *SearchStringOptions       `json:"string"`
 	Integer      *SearchIntegerOptions      `json:"integer"`
@@ -67,14 +67,14 @@ func (q Query) Validate(schema IndexSchema) error {
 		if len(q.VectorFlat.Vector) != int(value.VectorFlat.VectorSize) {
 			return fmt.Errorf("vectorFlat query vector length mismatch for property %s, expected %d got %d", q.Property, value.VectorFlat.VectorSize, len(q.VectorFlat.Vector))
 		}
-	case IndexTypeVectorVamana:
-		if q.VectorVamana == nil {
-			return fmt.Errorf("vectorVamana query options not provided for property %s", q.Property)
+	case IndexTypeVectorMetaNet:
+		if q.VectorMetaNet == nil {
+			return fmt.Errorf("vectorMetaNet query options not provided for property %s", q.Property)
 		}
-		if len(q.VectorVamana.Vector) != int(value.VectorVamana.VectorSize) {
-			return fmt.Errorf("vectorVamana query vector length mismatch for property %s, expected %d got %d", q.Property, value.VectorVamana.VectorSize, len(q.VectorVamana.Vector))
+		if len(q.VectorMetaNet.Vector) != int(value.VectorMetaNet.VectorSize) {
+			return fmt.Errorf("vectorMetaNet query vector length mismatch for property %s, expected %d got %d", q.Property, value.VectorMetaNet.VectorSize, len(q.VectorMetaNet.Vector))
 		}
-		if q.VectorVamana.SearchSize < q.VectorVamana.Limit {
+		if q.VectorMetaNet.SearchSize < q.VectorMetaNet.Limit {
 			return fmt.Errorf("searchSize must be greater than or equal to limit for property %s", q.Property)
 		}
 	case IndexTypeText:
@@ -127,7 +127,7 @@ type SortOption struct {
 	Descending bool   `json:"descending"`
 }
 
-type SearchVectorVamanaOptions struct {
+type SearchVectorMetaNetOptions struct {
 	Vector     []float32 `json:"vector" binding:"required,max=4096"`
 	Operator   string    `json:"operator" binding:"required,oneof=near"`
 	SearchSize int       `json:"searchSize" binding:"required,min=25,max=75"`

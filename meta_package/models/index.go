@@ -18,12 +18,12 @@ func (s IndexSchema) Validate() error {
 			if v.VectorFlat.DistanceMetric == DistanceHaversine && v.VectorFlat.VectorSize != 2 {
 				return fmt.Errorf("haversine distance metric requires vector size 2 for property %s, got %d", k, v.VectorFlat.VectorSize)
 			}
-		case IndexTypeVectorVamana:
-			if v.VectorVamana == nil {
-				return fmt.Errorf("vectorVamana parameters not provided for property %s", k)
+		case IndexTypeVectorMetaNet:
+			if v.VectorMetaNet == nil {
+				return fmt.Errorf("vectorMetaNet parameters not provided for property %s", k)
 			}
-			if v.VectorVamana.DistanceMetric == DistanceHaversine && v.VectorVamana.VectorSize != 2 {
-				return fmt.Errorf("haversine distance metric requires vector size 2 for property %s, got %d", k, v.VectorVamana.VectorSize)
+			if v.VectorMetaNet.DistanceMetric == DistanceHaversine && v.VectorMetaNet.VectorSize != 2 {
+				return fmt.Errorf("haversine distance metric requires vector size 2 for property %s, got %d", k, v.VectorMetaNet.VectorSize)
 			}
 		case IndexTypeText:
 			if v.Text == nil {
@@ -48,12 +48,12 @@ func (s IndexSchema) Validate() error {
 }
 
 type IndexSchemaValue struct {
-	Type         string                       `json:"type" binding:"required,oneof=vectorFlat vectorVamana text string integer float stringArray"`
-	VectorFlat   *IndexVectorFlatParameters   `json:"vectorFlat,omitempty"`
-	VectorVamana *IndexVectorVamanaParameters `json:"vectorVamana,omitempty"`
-	Text         *IndexTextParameters         `json:"text,omitempty"`
-	String       *IndexStringParameters       `json:"string,omitempty"`
-	StringArray  *IndexStringArrayParameters  `json:"stringArray,omitempty"`
+	Type          string                        `json:"type" binding:"required,oneof=vectorFlat vectorMetaNet text string integer float stringArray"`
+	VectorFlat    *IndexVectorFlatParameters    `json:"vectorFlat,omitempty"`
+	VectorMetaNet *IndexVectorMetaNetParameters `json:"vectorMetaNet,omitempty"`
+	Text          *IndexTextParameters          `json:"text,omitempty"`
+	String        *IndexStringParameters        `json:"string,omitempty"`
+	StringArray   *IndexStringArrayParameters   `json:"stringArray,omitempty"`
 }
 
 // Attempts to convert a given value to a vector
@@ -116,16 +116,16 @@ func (s IndexSchema) CheckCompatibleMap(m PointAsMap) error {
 			// We override the map value with the vector so downstream code can
 			// use the vector directly.
 			m[k] = vector
-		case IndexTypeVectorVamana:
+		case IndexTypeVectorMetaNet:
 			vector, err := convertToVector(v)
 			if err != nil {
 				return fmt.Errorf("expected a vector for property %s: %w", k, err)
 			}
-			if schema.VectorVamana == nil {
-				return fmt.Errorf("vamanaVamana parameters not provided for %s", k)
+			if schema.VectorMetaNet == nil {
+				return fmt.Errorf("MetaNet parameters not provided for %s", k)
 			}
-			if len(vector) != int(schema.VectorVamana.VectorSize) {
-				return fmt.Errorf("expected vector of size %d for property %s, got %d", schema.VectorVamana.VectorSize, k, len(vector))
+			if len(vector) != int(schema.VectorMetaNet.VectorSize) {
+				return fmt.Errorf("expected vector of size %d for property %s, got %d", schema.VectorMetaNet.VectorSize, k, len(vector))
 			}
 			// We override the map value with the vector so downstream code can
 			// use the vector directly.
@@ -196,7 +196,7 @@ type IndexVectorFlatParameters struct {
 	Quantizer      *Quantizer `json:"quantizer,omitempty"`
 }
 
-type IndexVectorVamanaParameters struct {
+type IndexVectorMetaNetParameters struct {
 	VectorSize     uint       `json:"vectorSize" binding:"required,min=1,max=4096"`
 	DistanceMetric string     `json:"distanceMetric" binding:"required,oneof=euclidean cosine dot hamming jaccard haversine"`
 	SearchSize     int        `json:"searchSize" binding:"min=25,max=75"`

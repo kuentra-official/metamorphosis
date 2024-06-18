@@ -16,13 +16,13 @@ const (
 // ---------------------------
 
 const (
-	IndexTypeVectorFlat   = "vectorFlat"
-	IndexTypeVectorVamana = "vectorVamana"
-	IndexTypeText         = "text"
-	IndexTypeString       = "string"
-	IndexTypeInteger      = "integer"
-	IndexTypeFloat        = "float"
-	IndexTypeStringArray  = "stringArray"
+	IndexTypeVectorFlat    = "vectorFlat"
+	IndexTypeVectorMetaNet = "vectorMetaNet"
+	IndexTypeText          = "text"
+	IndexTypeString        = "string"
+	IndexTypeInteger       = "integer"
+	IndexTypeFloat         = "float"
+	IndexTypeStringArray   = "stringArray"
 )
 
 // ---------------------------
